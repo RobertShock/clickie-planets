@@ -1,4 +1,4 @@
-console.log("imInMainJs");
+// console.log("imInMainJs");
 var planets = [{
   name: 'mercury',
   url: 'https://www.nasa.gov/sites/default/files/mercury_1.jpg'
@@ -27,19 +27,20 @@ var planets = [{
 
 var planetHolderDiv = document.getElementById('planteHolder');
 var getPlanetsButton = document.getElementById('showButton');
+var inputField = document.getElementById('searchText');
 
 var searchInputBox=document.getElementById("searchInput") 
 var clearButton=document.getElementById("clearButton") 
 var showPlanetsButton=document.getElementById("showPlanets") 
 var planetHolderDiv=document.getElementById("planetHolder") 
 
-function domString() {
+function domString(planetz) {
 	var planetString = '';
-	for(var i=0; i<planets.length; i++){
+	for(var i=0; i<planetz.length; i++){
 	var newPlanet ="";
 	newPlanet+=`<div class="planetBox" id="planetBox-${i}">`;
-	newPlanet+= `<div class="planetName">${planets[i].name}</div>`;
-	newPlanet+= `<img class="planetImage" src="${planets[i].url}"/>`;
+	newPlanet+= `<div class="planetName hidden">${planetz[i].name}</div>`;
+	newPlanet+= `<img class="planetImage" src="${planetz[i].url}"/>`;
 	newPlanet+=`</div>`;
 	planetString+=newPlanet;
 	}
@@ -51,16 +52,37 @@ function writeToDom(strange){
 }
 
 getPlanetsButton.addEventListener('mouseenter', function(){
-	domString();
+	domString(planets);
 })
 
-domString();
+function showMe(e){
+	e.target.previousSibling.classList.remove('hidden');
+}
 
+document.body.addEventListener('click', function(event){
+	// console.log("click event", event);
+	// console.log("event", event.target.parentNode.parentNode.parentNode);
+	if(event.target.className === 'planetImage'){
+		console.log("yaaaaaaa!");
+		showMe(event);
 
+	}
+})
 
-
-
-
+inputField.addEventListener('keypress', function(event){
+	// console.log("event", event);
+	if(event.key === 'Enter'){
+		var txt = inputField.value;
+		// 1. filter planets array
+		var results = planets.filter(function(thing){
+			// console.log("filter thing", thing);
+			return thing.name.indexOf(txt)>-1;
+		})
+		// rerun domString
+		domString(results);
+		// console.log('yay', results);
+	}
+})
 
 
 
